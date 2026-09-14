@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+```
+<title>Problem Details | Innovation Portal</title>
+
+<link rel="stylesheet" href="css/style.css">
+```
+
+</head>
+
+<body>
+
+<header class="navbar">
+
+```
+<a href="index.html" class="logo">
+    💡 Innovation Portal
+</a>
+
+<nav>
+    <a href="index.html">Home</a>
+    <a href="problems.html" class="active">Problems</a>
+    <a href="submit.html">Submit Problem</a>
+    <a href="login.html">Login</a>
+    <a href="signup.html" class="nav-btn">Sign Up</a>
+</nav>
+```
+
+</header>
+
+<section class="page-header">
+
+```
+<h1>Problem Details</h1>
+
+<p>
+    Detailed information about the community problem.
+</p>
+```
+
+</section>
+
+<section class="problem-section">
+
+```
+<div
+    id="problem-details"
+    class="problem-card"
+>
+
+    <p>Loading problem details...</p>
+
+</div>
+```
+
+</section>
+
+<footer>
+
+```
+<p>
+    © 2026 Innovation Portal | SIH26043
+</p>
+```
+
+</footer>
+
+<script>
+
+async function loadProblemDetails() {
+
+    const container =
+        document.getElementById("problem-details");
+
+
+    // Get problem ID from URL
+
+    const params =
+        new URLSearchParams(
+            window.location.search
+        );
+
+    const id =
+        params.get("id");
+
+
+    if (!id) {
+
+        container.innerHTML = `
+            <h3>Problem ID not found</h3>
+            <p>
+                Please go back to Problems page
+                and select a problem.
+            </p>
+        `;
+
+        return;
+    }
+
+
+    try {
+
+        // Get problems from backend
+
+        const response =
+            await fetch(
+                "http://localhost:5000/api/problems"
+            );
+
+
+        const result =
+            await response.json();
+
+
+        if (!result.success) {
+
+            container.innerHTML =
+                "<p>Problems load heiparila.</p>";
+
+            return;
+        }
+
+
+        // Find selected problem
+
+        const problem =
+            result.problems.find(
+                p => p.id === Number(id)
+            );
+
+
+        if (!problem) {
+
+            container.innerHTML = `
+                <h3>Problem not found</h3>
+                <p>
+                    Ei problem backend re milila nahi.
+                </p>
+            `;
+
+            return;
+        }
+
+
+        // Display complete problem
+
+        container.innerHTML = `
+
+            <span class="tag">
+                ${problem.category || "General"}
+            </span>
+
+
+            <span class="impact ${
+                (problem.impact || "")
+                .toLowerCase()
+            }">
+
+                ${problem.impact || "Not specified"}
+
+            </span>
+
+
+            <h1>
+                ${problem.title}
+            </h1>
+
+
+            <hr>
+
+
+            <p>
+                <strong>📂 Category:</strong>
+                ${problem.category || "Not specified"}
+            </p>
+
+
+            <p>
+                <strong>⚠️ Impact:</strong>
+                ${problem.impact || "Not specified"}
+            </p>
+
+
+            <p>
+                <strong>🌎 State:</strong>
+                ${problem.state || "Not specified"}
+            </p>
+
+
+            <p>
+                <strong>📍 District:</strong>
+                ${problem.district || "Not specified"}
+            </p>
+
+
+            <p>
+                <strong>📌 Location:</strong>
+                ${problem.location || "Not specified"}
+            </p>
+
+
+            <h3>
+                Problem Description
+            </h3>
+
+            <p>
+                ${problem.description || "Not specified"}
+            </p>
+
+
+            <h3>
+                Expected Solution
+            </h3>
+
+            <p>
+                ${
+                    problem.expectedSolution ||
+                    "Not specified"
+                }
+            </p>
+
+
+            <h3>
+                Beneficiaries
+            </h3>
+
+            <p>
+                ${
+                    problem.beneficiaries ||
+                    "Not specified"
+                }
+            </p>
+
+
+            <h3>
+                Status
+            </h3>
+
+            <p>
+                <strong>
+                    ${problem.status || "Pending"}
+                </strong>
+            </p>
+
+
+            <h3>
+                Submitted On
+            </h3>
+
+            <p>
+                ${
+                    problem.createdAt
+                    ? new Date(
+                        problem.createdAt
+                      ).toLocaleString()
+                    : "Not available"
+                }
+            </p>
+
+
+            ${
+                problem.image
+                ? `
+                    <h3>Problem Image</h3>
+
+                    <img
+                        src="http://localhost:5000/uploads/${problem.image}"
+                        alt="Problem Image"
+                        style="
+                            max-width:100%;
+                            border-radius:10px;
+                            margin-top:10px;
+                        "
+                    >
+                  `
+                : ""
+            }
+
+
+            <br><br>
+
+
+            <a
+                href="problems.html"
+                class="view-btn"
+            >
+                ← Back to Problems
+            </a>
+
+        `;
+
+    }
+
+    catch (error) {
+
+        console.error(error);
+
+        container.innerHTML = `
+            <h3>Backend connection failed!</h3>
+            <p>
+                Make sure Node.js server is running.
+            </p>
+        `;
+    }
+
+}
+
+
+// Start
+
+loadProblemDetails();
+
+</script>
+
+</body>
+</html>

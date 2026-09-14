@@ -1,0 +1,1618 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Admin Dashboard - Jan-Innovate Hub</title>
+
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f5f7fb;
+            color: #222;
+        }
+
+
+        /* ================= NAVBAR ================= */
+
+        nav {
+            background: #1e3a8a;
+            color: white;
+
+            padding: 18px 30px;
+
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            margin-left: 18px;
+        }
+
+        nav a:hover {
+            text-decoration: underline;
+        }
+
+        .logout {
+            background: #dc2626;
+            padding: 8px 14px;
+            border-radius: 6px;
+        }
+
+
+        /* ================= CONTAINER ================= */
+
+        .container {
+            max-width: 1200px;
+            margin: 30px auto;
+            padding: 20px;
+        }
+
+        h1 {
+            margin-bottom: 5px;
+        }
+
+        .subtitle {
+            color: #666;
+            margin-bottom: 30px;
+        }
+
+
+        /* ================= DASHBOARD ================= */
+
+        .dashboard {
+
+            display: grid;
+
+            grid-template-columns:
+                repeat(5, 1fr);
+
+            gap: 15px;
+
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+
+            background: white;
+
+            padding: 20px;
+
+            border-radius: 12px;
+
+            text-align: center;
+
+            box-shadow:
+                0 3px 10px rgba(0,0,0,0.08);
+        }
+
+        .stat-card h2 {
+
+            font-size: 32px;
+
+            margin: 5px 0;
+        }
+
+        .stat-card p {
+
+            margin: 0;
+
+            color: #666;
+
+            font-weight: bold;
+        }
+
+        .total h2 {
+            color: #1e3a8a;
+        }
+
+        .pending h2 {
+            color: #d97706;
+        }
+
+        .approved h2 {
+            color: #0891b2;
+        }
+
+        .progress h2 {
+            color: #2563eb;
+        }
+
+        .resolved h2 {
+            color: #16a34a;
+        }
+
+
+        /* ================= SEARCH / FILTER ================= */
+
+        .filter-box {
+
+            background: white;
+
+            padding: 20px;
+
+            border-radius: 12px;
+
+            margin-bottom: 25px;
+
+            box-shadow:
+                0 3px 10px rgba(0,0,0,0.06);
+        }
+
+        .filter-title {
+
+            font-size: 18px;
+
+            font-weight: bold;
+
+            margin-bottom: 15px;
+        }
+
+        .filters {
+
+            display: grid;
+
+            grid-template-columns:
+                2fr 1fr 1fr 1fr auto;
+
+            gap: 10px;
+
+            align-items: center;
+        }
+
+        .filters input,
+        .filters select {
+
+            width: 100%;
+
+            padding: 11px;
+
+            border: 1px solid #ccc;
+
+            border-radius: 7px;
+
+            font-size: 14px;
+        }
+
+        .reset-btn {
+
+            padding: 11px 16px;
+
+            border: none;
+
+            border-radius: 7px;
+
+            background: #6b7280;
+
+            color: white;
+
+            cursor: pointer;
+        }
+
+        .reset-btn:hover {
+            opacity: 0.85;
+        }
+
+
+        /* ================= RESULTS ================= */
+
+        .results-info {
+
+            margin-bottom: 15px;
+
+            color: #555;
+
+            font-weight: bold;
+        }
+
+
+        /* ================= PROBLEM CARD ================= */
+
+        .problem-card {
+
+            background: white;
+
+            padding: 22px;
+
+            border-radius: 12px;
+
+            margin-bottom: 20px;
+
+            box-shadow:
+                0 3px 10px rgba(0,0,0,0.08);
+        }
+
+        .problem-card h2 {
+
+            margin-top: 0;
+
+            color: #1e3a8a;
+        }
+
+        .info {
+
+            margin: 7px 0;
+
+            line-height: 1.5;
+        }
+
+
+        /* ================= STATUS ================= */
+
+        .status {
+
+            display: inline-block;
+
+            padding: 7px 13px;
+
+            border-radius: 20px;
+
+            font-weight: bold;
+
+            margin-top: 10px;
+        }
+
+        .Pending {
+
+            background: #fff3cd;
+
+            color: #856404;
+        }
+
+        .Approved {
+
+            background: #d1ecf1;
+
+            color: #0c5460;
+        }
+
+        .Rejected {
+
+            background: #f8d7da;
+
+            color: #721c24;
+        }
+
+        .InProgress {
+
+            background: #cce5ff;
+
+            color: #004085;
+        }
+
+        .Resolved {
+
+            background: #d4edda;
+
+            color: #155724;
+        }
+
+
+        /* ================= IMAGE ================= */
+
+        .problem-image {
+
+            max-width: 250px;
+
+            max-height: 180px;
+
+            margin-top: 12px;
+
+            border-radius: 8px;
+
+            object-fit: cover;
+        }
+
+
+        /* ================= BUTTONS ================= */
+
+        .actions {
+
+            margin-top: 15px;
+
+            display: flex;
+
+            flex-wrap: wrap;
+
+            gap: 10px;
+        }
+
+        .actions button {
+
+            border: none;
+
+            padding: 9px 14px;
+
+            border-radius: 7px;
+
+            cursor: pointer;
+
+            color: white;
+        }
+
+        .approve {
+            background: #16a34a;
+        }
+
+        .reject {
+            background: #dc2626;
+        }
+
+        .progress-btn {
+            background: #2563eb;
+        }
+
+        .resolve {
+            background: #15803d;
+        }
+
+        .actions button:hover {
+            opacity: 0.85;
+        }
+
+
+        /* ================= VIEW BUTTON ================= */
+
+        .view-btn {
+
+            display: inline-block;
+
+            margin-top: 12px;
+
+            background: #1e3a8a;
+
+            color: white;
+
+            text-decoration: none;
+
+            padding: 9px 14px;
+
+            border-radius: 7px;
+        }
+
+
+        /* ================= EMPTY ================= */
+
+        .empty {
+
+            background: white;
+
+            padding: 45px;
+
+            text-align: center;
+
+            border-radius: 12px;
+
+            color: #666;
+        }
+
+
+        /* ================= RESPONSIVE ================= */
+
+        @media (max-width: 950px) {
+
+            .dashboard {
+
+                grid-template-columns:
+                    repeat(2, 1fr);
+            }
+
+            .filters {
+
+                grid-template-columns:
+                    1fr 1fr;
+            }
+
+        }
+
+
+        @media (max-width: 600px) {
+
+            nav {
+
+                flex-direction: column;
+
+                gap: 12px;
+
+                text-align: center;
+            }
+
+            nav a {
+
+                margin: 5px;
+            }
+
+            .dashboard {
+
+                grid-template-columns:
+                    1fr;
+            }
+
+            .filters {
+
+                grid-template-columns:
+                    1fr;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<!-- ================= SECURITY ================= -->
+
+<script>
+
+    if (
+        localStorage.getItem("adminLoggedIn")
+        !== "true"
+    ) {
+
+        window.location.href =
+            "admin-login.html";
+
+    }
+
+</script>
+
+
+<!-- ================= NAVBAR ================= -->
+
+<nav>
+
+    <div class="logo">
+
+        Jan-Innovate Hub — Admin
+
+    </div>
+
+
+    <div>
+
+        <a href="index.html">
+            Home
+        </a>
+
+        <a href="problems.html">
+            Problems
+        </a>
+
+        <a href="#"
+           onclick="logout()"
+           class="logout">
+
+            Logout
+
+        </a>
+
+    </div>
+
+</nav>
+
+
+<!-- ================= MAIN ================= -->
+
+<div class="container">
+
+
+    <h1>
+        Admin Dashboard
+    </h1>
+
+    <p class="subtitle">
+        Manage and monitor submitted societal problems.
+    </p>
+
+
+    <!-- ================= DASHBOARD COUNTS ================= -->
+
+    <div class="dashboard">
+
+
+        <div class="stat-card total">
+
+            <h2 id="totalCount">
+                0
+            </h2>
+
+            <p>
+                Total Problems
+            </p>
+
+        </div>
+
+
+        <div class="stat-card pending">
+
+            <h2 id="pendingCount">
+                0
+            </h2>
+
+            <p>
+                Pending
+            </p>
+
+        </div>
+
+
+        <div class="stat-card approved">
+
+            <h2 id="approvedCount">
+                0
+            </h2>
+
+            <p>
+                Approved
+            </p>
+
+        </div>
+
+
+        <div class="stat-card progress">
+
+            <h2 id="progressCount">
+                0
+            </h2>
+
+            <p>
+                In Progress
+            </p>
+
+        </div>
+
+
+        <div class="stat-card resolved">
+
+            <h2 id="resolvedCount">
+                0
+            </h2>
+
+            <p>
+                Resolved
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <!-- ================= SEARCH / FILTER ================= -->
+
+    <div class="filter-box">
+
+        <div class="filter-title">
+            🔎 Search & Filter Problems
+        </div>
+
+
+        <div class="filters">
+
+
+            <!-- SEARCH -->
+
+            <input
+                type="text"
+                id="searchInput"
+                placeholder="Search problem title or description..."
+                oninput="applyFilters()"
+            >
+
+
+            <!-- CATEGORY -->
+
+            <select
+                id="categoryFilter"
+                onchange="applyFilters()"
+            >
+
+                <option value="All">
+                    All Categories
+                </option>
+
+                <option value="Education">
+                    Education
+                </option>
+
+                <option value="Healthcare">
+                    Healthcare
+                </option>
+
+                <option value="Agriculture">
+                    Agriculture
+                </option>
+
+                <option value="Water">
+                    Water
+                </option>
+
+                <option value="Sanitation">
+                    Sanitation
+                </option>
+
+                <option value="Environment">
+                    Environment
+                </option>
+
+                <option value="Infrastructure">
+                    Infrastructure
+                </option>
+
+                <option value="Other">
+                    Other
+                </option>
+
+            </select>
+
+
+            <!-- DISTRICT -->
+
+            <select
+                id="districtFilter"
+                onchange="applyFilters()"
+            >
+
+                <option value="All">
+                    All Districts
+                </option>
+
+            </select>
+
+
+            <!-- STATUS -->
+
+            <select
+                id="statusFilter"
+                onchange="applyFilters()"
+            >
+
+                <option value="All">
+                    All Status
+                </option>
+
+                <option value="Pending">
+                    Pending
+                </option>
+
+                <option value="Approved">
+                    Approved
+                </option>
+
+                <option value="Rejected">
+                    Rejected
+                </option>
+
+                <option value="In Progress">
+                    In Progress
+                </option>
+
+                <option value="Resolved">
+                    Resolved
+                </option>
+
+            </select>
+
+
+            <!-- RESET -->
+
+            <button
+                class="reset-btn"
+                onclick="resetFilters()"
+            >
+
+                Reset
+
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <!-- ================= RESULT COUNT ================= -->
+
+    <div
+        class="results-info"
+        id="resultsInfo"
+    >
+        Loading...
+    </div>
+
+
+    <!-- ================= PROBLEMS ================= -->
+
+    <div id="problemsContainer">
+
+        Loading problems...
+
+    </div>
+
+
+</div>
+
+
+<script>
+
+
+/* =====================================================
+   GLOBAL PROBLEMS ARRAY
+===================================================== */
+
+let allProblems = [];
+
+
+/* =====================================================
+   LOAD PROBLEMS FROM BACKEND
+===================================================== */
+
+async function loadProblems() {
+
+
+    const container =
+        document.getElementById(
+            "problemsContainer"
+        );
+
+
+    container.innerHTML =
+        "Loading problems...";
+
+
+    try {
+
+
+        const response =
+            await fetch(
+                "http://localhost:5000/api/problems"
+            );
+
+
+        const result =
+            await response.json();
+
+
+        if (!result.success) {
+
+            throw new Error(
+                "Unable to load problems"
+            );
+
+        }
+
+
+        allProblems =
+            result.problems || [];
+
+
+        /* UPDATE DASHBOARD */
+
+        updateDashboard();
+
+
+        /* CREATE DISTRICT OPTIONS */
+
+        createDistrictOptions();
+
+
+        /* DISPLAY */
+
+        applyFilters();
+
+
+    }
+
+    catch (error) {
+
+
+        console.error(error);
+
+
+        container.innerHTML = `
+
+            <div class="empty">
+
+                <h2>
+                    Unable to Load Problems
+                </h2>
+
+                <p>
+                    Make sure the backend is running
+                    on port 5000.
+                </p>
+
+            </div>
+
+        `;
+
+
+        document.getElementById(
+            "resultsInfo"
+        ).textContent =
+            "Unable to load problems.";
+
+    }
+
+}
+
+
+/* =====================================================
+   DASHBOARD COUNTS
+===================================================== */
+
+function updateDashboard() {
+
+
+    const total =
+        allProblems.length;
+
+
+    const pending =
+        allProblems.filter(
+            p => p.status === "Pending"
+        ).length;
+
+
+    const approved =
+        allProblems.filter(
+            p => p.status === "Approved"
+        ).length;
+
+
+    const progress =
+        allProblems.filter(
+            p => p.status === "In Progress"
+        ).length;
+
+
+    const resolved =
+        allProblems.filter(
+            p => p.status === "Resolved"
+        ).length;
+
+
+    document.getElementById(
+        "totalCount"
+    ).textContent = total;
+
+
+    document.getElementById(
+        "pendingCount"
+    ).textContent = pending;
+
+
+    document.getElementById(
+        "approvedCount"
+    ).textContent = approved;
+
+
+    document.getElementById(
+        "progressCount"
+    ).textContent = progress;
+
+
+    document.getElementById(
+        "resolvedCount"
+    ).textContent = resolved;
+
+}
+
+
+/* =====================================================
+   CREATE DISTRICT FILTER
+===================================================== */
+
+function createDistrictOptions() {
+
+
+    const select =
+        document.getElementById(
+            "districtFilter"
+        );
+
+
+    const currentValue =
+        select.value;
+
+
+    const districts = [
+        ...new Set(
+
+            allProblems
+                .map(
+                    p =>
+                        (p.district || "")
+                            .trim()
+                )
+                .filter(
+                    district =>
+                        district !== ""
+                )
+
+        )
+    ];
+
+
+    districts.sort();
+
+
+    select.innerHTML = `
+
+        <option value="All">
+            All Districts
+        </option>
+
+    `;
+
+
+    districts.forEach(
+        district => {
+
+            const option =
+                document.createElement(
+                    "option"
+                );
+
+            option.value =
+                district;
+
+            option.textContent =
+                district;
+
+            select.appendChild(
+                option
+            );
+
+        }
+    );
+
+
+    if (
+        districts.includes(
+            currentValue
+        )
+    ) {
+
+        select.value =
+            currentValue;
+
+    }
+
+}
+
+
+/* =====================================================
+   APPLY SEARCH + FILTER
+===================================================== */
+
+function applyFilters() {
+
+
+    const search =
+        document.getElementById(
+            "searchInput"
+        )
+        .value
+        .toLowerCase()
+        .trim();
+
+
+    const category =
+        document.getElementById(
+            "categoryFilter"
+        ).value;
+
+
+    const district =
+        document.getElementById(
+            "districtFilter"
+        ).value;
+
+
+    const status =
+        document.getElementById(
+            "statusFilter"
+        ).value;
+
+
+    let filtered =
+        allProblems.filter(
+            problem => {
+
+
+                /* SEARCH */
+
+                const searchText = `
+
+                    ${problem.title || ""}
+
+                    ${problem.description || ""}
+
+                    ${problem.category || ""}
+
+                    ${problem.district || ""}
+
+                    ${problem.location || ""}
+
+                `.toLowerCase();
+
+
+                const matchesSearch =
+                    search === "" ||
+                    searchText.includes(
+                        search
+                    );
+
+
+                /* CATEGORY */
+
+                const matchesCategory =
+                    category === "All" ||
+                    problem.category === category;
+
+
+                /* DISTRICT */
+
+                const matchesDistrict =
+                    district === "All" ||
+                    (problem.district || "")
+                        .trim()
+                        .toLowerCase()
+                        ===
+                    district
+                        .trim()
+                        .toLowerCase();
+
+
+                /* STATUS */
+
+                const matchesStatus =
+                    status === "All" ||
+                    problem.status === status;
+
+
+                return (
+                    matchesSearch &&
+                    matchesCategory &&
+                    matchesDistrict &&
+                    matchesStatus
+                );
+
+            }
+        );
+
+
+    displayProblems(
+        filtered
+    );
+
+}
+
+
+/* =====================================================
+   DISPLAY PROBLEMS
+===================================================== */
+
+function displayProblems(
+    problems
+) {
+
+
+    const container =
+        document.getElementById(
+            "problemsContainer"
+        );
+
+
+    const resultsInfo =
+        document.getElementById(
+            "resultsInfo"
+        );
+
+
+    resultsInfo.textContent =
+        `Showing ${problems.length} of ${allProblems.length} problems`;
+
+
+    if (
+        problems.length === 0
+    ) {
+
+
+        container.innerHTML = `
+
+            <div class="empty">
+
+                <h2>
+                    No Problems Found
+                </h2>
+
+                <p>
+                    Try changing your search
+                    or filter.
+                </p>
+
+            </div>
+
+        `;
+
+
+        return;
+
+    }
+
+
+    container.innerHTML =
+        "";
+
+
+    problems
+        .slice()
+        .reverse()
+        .forEach(
+            problem => {
+
+
+                const card =
+                    document.createElement(
+                        "div"
+                    );
+
+
+                card.className =
+                    "problem-card";
+
+
+                const statusClass =
+                    (problem.status || "")
+                        .replace(
+                            " ",
+                            ""
+                        );
+
+
+                let imageHTML =
+                    "";
+
+
+                if (
+                    problem.image
+                ) {
+
+                    imageHTML = `
+
+                        <img
+                            class="problem-image"
+                            src="http://localhost:5000/uploads/${encodeURIComponent(problem.image)}"
+                            alt="Problem Image"
+                        >
+
+                    `;
+
+                }
+
+
+                let buttonsHTML =
+                    "";
+
+
+                /* PENDING */
+
+                if (
+                    problem.status ===
+                    "Pending"
+                ) {
+
+                    buttonsHTML = `
+
+                        <button
+                            class="approve"
+                            onclick="changeStatus(
+                                ${problem.id},
+                                'Approved'
+                            )">
+
+                            ✓ Approve
+
+                        </button>
+
+
+                        <button
+                            class="reject"
+                            onclick="changeStatus(
+                                ${problem.id},
+                                'Rejected'
+                            )">
+
+                            ✕ Reject
+
+                        </button>
+
+                    `;
+
+                }
+
+
+                /* APPROVED */
+
+                if (
+                    problem.status ===
+                    "Approved"
+                ) {
+
+                    buttonsHTML = `
+
+                        <button
+                            class="progress-btn"
+                            onclick="changeStatus(
+                                ${problem.id},
+                                'In Progress'
+                            )">
+
+                            🔄 Start Work
+
+                        </button>
+
+                    `;
+
+                }
+
+
+                /* IN PROGRESS */
+
+                if (
+                    problem.status ===
+                    "In Progress"
+                ) {
+
+                    buttonsHTML = `
+
+                        <button
+                            class="resolve"
+                            onclick="changeStatus(
+                                ${problem.id},
+                                'Resolved'
+                            )">
+
+                            ✓ Mark Resolved
+
+                        </button>
+
+                    `;
+
+                }
+
+
+                card.innerHTML = `
+
+                    <h2>
+                        ${escapeHTML(
+                            problem.title
+                        )}
+                    </h2>
+
+
+                    <p class="info">
+
+                        <strong>
+                            Category:
+                        </strong>
+
+                        ${escapeHTML(
+                            problem.category
+                        )}
+
+                    </p>
+
+
+                    <p class="info">
+
+                        <strong>
+                            Impact:
+                        </strong>
+
+                        ${escapeHTML(
+                            problem.impact ||
+                            "Not provided"
+                        )}
+
+                    </p>
+
+
+                    <p class="info">
+
+                        <strong>
+                            District:
+                        </strong>
+
+                        ${escapeHTML(
+                            problem.district ||
+                            "Not provided"
+                        )}
+
+                    </p>
+
+
+                    <p class="info">
+
+                        <strong>
+                            Location:
+                        </strong>
+
+                        ${escapeHTML(
+                            problem.location ||
+                            "Not provided"
+                        )}
+
+                    </p>
+
+
+                    <p class="info">
+
+                        <strong>
+                            Description:
+                        </strong>
+
+                        ${escapeHTML(
+                            problem.description
+                        )}
+
+                    </p>
+
+
+                    <span
+                        class="status ${statusClass}">
+
+                        ${escapeHTML(
+                            problem.status
+                        )}
+
+                    </span>
+
+
+                    ${imageHTML}
+
+
+                    <br>
+
+
+                    <a
+                        class="view-btn"
+                        href="details.html?id=${encodeURIComponent(problem.id)}">
+
+                        View Details
+
+                    </a>
+
+
+                    <div class="actions">
+
+                        ${buttonsHTML}
+
+                    </div>
+
+                `;
+
+
+                container.appendChild(
+                    card
+                );
+
+            }
+        );
+
+}
+
+
+/* =====================================================
+   CHANGE STATUS
+===================================================== */
+
+async function changeStatus(
+    problemId,
+    newStatus
+) {
+
+
+    try {
+
+
+        const response =
+            await fetch(
+
+                `http://localhost:5000/api/problems/${problemId}/status`,
+
+                {
+
+                    method: "PATCH",
+
+                    headers: {
+
+                        "Content-Type":
+                            "application/json"
+
+                    },
+
+                    body:
+                        JSON.stringify({
+                            status:
+                                newStatus
+                        })
+
+                }
+
+            );
+
+
+        const result =
+            await response.json();
+
+
+        if (!response.ok) {
+
+            alert(
+                result.message ||
+                "Status update failed"
+            );
+
+            return;
+
+        }
+
+
+        alert(
+            `Problem ${newStatus} successfully!`
+        );
+
+
+        /* Reload backend data */
+
+        loadProblems();
+
+
+    }
+
+    catch (error) {
+
+        console.error(error);
+
+        alert(
+            "Backend connection failed."
+        );
+
+    }
+
+}
+
+
+/* =====================================================
+   RESET FILTERS
+===================================================== */
+
+function resetFilters() {
+
+
+    document.getElementById(
+        "searchInput"
+    ).value = "";
+
+
+    document.getElementById(
+        "categoryFilter"
+    ).value = "All";
+
+
+    document.getElementById(
+        "districtFilter"
+    ).value = "All";
+
+
+    document.getElementById(
+        "statusFilter"
+    ).value = "All";
+
+
+    applyFilters();
+
+}
+
+
+/* =====================================================
+   LOGOUT
+===================================================== */
+
+function logout() {
+
+
+    localStorage.removeItem(
+        "adminLoggedIn"
+    );
+
+
+    localStorage.removeItem(
+        "admin"
+    );
+
+
+    window.location.href =
+        "admin-login.html";
+
+}
+
+
+/* =====================================================
+   HTML SECURITY
+===================================================== */
+
+function escapeHTML(
+    text
+) {
+
+    return String(
+        text || ""
+    )
+
+        .replace(
+            /&/g,
+            "&amp;"
+        )
+
+        .replace(
+            /</g,
+            "&lt;"
+        )
+
+        .replace(
+            />/g,
+            "&gt;"
+        )
+
+        .replace(
+            /"/g,
+            "&quot;"
+        )
+
+        .replace(
+            /'/g,
+            "&#039;"
+        );
+
+}
+
+
+/* =====================================================
+   START
+===================================================== */
+
+loadProblems();
+
+</script>
+
+
+</body>
+
+</html>
