@@ -1,0 +1,209 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Problems - Jan-Innovate Hub</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            background: #f5f7fb;
+        }
+
+        nav {
+            background: #1e3a8a;
+            color: white;
+            padding: 18px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            margin-left: 20px;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 30px auto;
+            padding: 20px;
+        }
+
+        .card {
+            background: white;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 12px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+        }
+
+        .status {
+            display: inline-block;
+            padding: 7px 14px;
+            border-radius: 20px;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+
+        .Pending {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .Approved {
+            background: #d1ecf1;
+            color: #0c5460;
+        }
+
+        .InProgress {
+            background: #cce5ff;
+            color: #004085;
+        }
+
+        .Resolved {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .Rejected {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .empty {
+            text-align: center;
+            background: white;
+            padding: 40px;
+            border-radius: 12px;
+        }
+    </style>
+</head>
+
+<body>
+
+<nav>
+    <strong>Jan-Innovate Hub</strong>
+
+    <div>
+        <a href="index.html">Home</a>
+        <a href="submit.html">Submit Problem</a>
+    </div>
+</nav>
+
+<div class="container">
+
+    <h1>My Problems</h1>
+    <p>Track the problems you have submitted.</p>
+
+    <div id="problemsContainer">
+        Loading...
+    </div>
+
+</div>
+
+<script>
+
+const user = JSON.parse(localStorage.getItem("user"));
+
+if (!user) {
+    alert("Please login first.");
+    window.location.href = "login.html";
+}
+
+async function loadMyProblems() {
+
+    try {
+
+        const response = await fetch("http://localhost:5000/api/problems");
+        const result = await response.json();
+
+        const container = document.getElementById("problemsContainer");
+
+        const myProblems = result.problems.filter(problem =>
+            problem.submittedBy &&
+            problem.submittedBy.toLowerCase() === user.email.toLowerCase()
+        );
+
+        if (myProblems.length === 0) {
+
+            container.innerHTML = `
+                <div class="empty">
+                    <h2>No Problems Submitted</h2>
+                    <p>You have not submitted any problem yet.</p>
+                    <a href="submit.html">Submit a Problem</a>
+                </div>
+            `;
+
+            return;
+        }
+
+        container.innerHTML = "";
+
+        myProblems.forEach(problem => {
+
+            let statusClass = problem.status.replace(" ", "");
+
+            container.innerHTML += `
+
+                <div class="card">
+
+                    <h2>${escapeHTML(problem.title)}</h2>
+
+                    <p>
+                        <strong>Category:</strong>
+                        ${escapeHTML(problem.category)}
+                    </p>
+
+                    <p>
+                        <strong>District:</strong>
+                        ${escapeHTML(problem.district || "Not provided")}
+                    </p>
+
+                    <p>
+                        ${escapeHTML(problem.description)}
+                    </p>
+
+                    <div class="status ${statusClass}">
+                        Status: ${escapeHTML(problem.status)}
+                    </div>
+
+                </div>
+
+            `;
+        });
+
+    } catch (error) {
+
+        document.getElementById("problemsContainer").innerHTML = `
+            <div class="empty">
+                <h2>Unable to load problems</h2>
+                <p>Please make sure your backend is running.</p>
+            </div>
+        `;
+
+    }
+}
+
+function escapeHTML(text) {
+
+    return String(text || "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+
+}
+
+loadMyProblems();
+
+</script>
+
+</body>
+</html>
+```
